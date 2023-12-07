@@ -71,34 +71,48 @@ namespace Entidades.Modelos
         }
         private void NotificarNuevoIngreso()
         {
-            while (true)
-            { 
-                Thread.Sleep(5000);
+           
+            if (this.OnIngreso is not null)
+            {
                 this.menu = new T();
                 this.menu.IniciarPreparacion();
-                if (this.OnIngreso is not null)
-                {
-                    this.EsperarProximoIngreso();
-                }
-                else
-                {
-                    this.OnIngreso.Invoke(this.menu);
-                }
+                this.OnIngreso.Invoke(this.menu);
             }
+
+
+
+
+
+            //else
+            //{
+            //    this.OnIngreso.Invoke(this.menu);
+            //}
+
+
+            //while (true)
+            //{ 
+            //    Thread.Sleep(5000);
+            //    this.menu = new T();
+            //    this.menu.IniciarPreparacion();
+            //    if (this.OnIngreso is not null)
+            //    {
+            //        this.EsperarProximoIngreso();
+            //    }
+            //    else
+            //    {
+            //        this.OnIngreso.Invoke(this.menu);
+            //    }
+            //}
         }
         private void EsperarProximoIngreso()
         {
             int tiempoEspera = 0;
-            if (this.OnDemora is not null)
+            if (this.OnDemora is not null && !this.menu.Estado)
             {
                 Thread.Sleep(1000);
                 this.demoraPreparacionTotal += tiempoEspera;
                 this.OnDemora.Invoke(this.demoraPreparacionTotal);
 
-            }
-            else
-            {
-                this.OnDemora.Invoke(this.demoraPreparacionTotal);
             }
         }
     }
